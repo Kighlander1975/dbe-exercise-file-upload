@@ -1,0 +1,34 @@
+# 1) PHP-Ausführung verhindern (auch phtml, phar)
+<FilesMatch "\.(php|phtml|phar)$">
+  Require all denied
+</FilesMatch>
+
+# 2) Directory Listing deaktivieren
+Options -Indexes
+
+# 3) Nur bestimmte Dateiendungen erlauben, alles andere verbieten
+# Erlaubte Endungen (erweitere bei Bedarf)
+# Bilder
+<FilesMatch "\.(?:jpe?g|png|gif|webp|bmp|tiff?|svg)$">
+  Require all granted
+</FilesMatch>
+
+# Audio
+<FilesMatch "\.(?:mp3|wav|ogg|oga|flac|m4a|aac|opus)$">
+  Require all granted
+</FilesMatch>
+
+# Video
+<FilesMatch "\.(?:mp4|m4v|mov|avi|mpe?g|mpg|webm|ogv|mkv)$">
+  Require all granted
+</FilesMatch>
+
+# Dokumente: PDF + Office (MS + OpenDocument) + Text
+<FilesMatch "\.(?:pdf|docx?|dotx?|xlsx?|xltx?|pptx?|potx?|ppsx?|odt|ods|odp|odg|odf|ott|ots|otp|rtf|txt|md)$">
+  Require all granted
+</FilesMatch>
+
+# 4) Default: alles andere verbieten
+<Files "*">
+  Require all denied
+</Files>

@@ -1,0 +1,13 @@
+# Aktiviere Rewrite
+RewriteEngine On
+
+# Basis relativ zu http://localhost/DBE-exercises/dbe-php-file-upload/
+RewriteBase /DBE-exercises/dbe-php-file-upload/
+
+# 1) Wenn die angeforderte Ressource real existiert (Datei oder Ordner), direkt liefern
+RewriteCond %{DOCUMENT_ROOT}/DBE-exercises/dbe-php-file-upload/$1 -f [OR]
+RewriteCond %{DOCUMENT_ROOT}/DBE-exercises/dbe-php-file-upload/$1 -d
+RewriteRule ^(.+)$ $1 [L]
+
+# 2) Ansonsten alles auf public/index.php routen (Front Controller)
+RewriteRule ^.*$ public/index.php [L]
