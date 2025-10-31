@@ -8,6 +8,10 @@ RewriteBase /DBE-exercises/dbe-php-file-upload/
 RewriteCond %{REQUEST_URI} ^/DBE-exercises/dbe-php-file-upload/assets/(.*)$
 RewriteRule ^assets/(.*)$ public/assets/$1 [L]
 
+# Spezielle Regel für file.php
+RewriteCond %{REQUEST_URI} ^/DBE-exercises/dbe-php-file-upload/file.php
+RewriteRule ^file.php$ public/file.php [L]
+
 # 1) Wenn die angeforderte Ressource real existiert (Datei oder Ordner), direkt liefern
 RewriteCond %{DOCUMENT_ROOT}/DBE-exercises/dbe-php-file-upload/$1 -f [OR]
 RewriteCond %{DOCUMENT_ROOT}/DBE-exercises/dbe-php-file-upload/$1 -d

@@ -750,4 +750,57 @@ class FileSystemExplorer
 
         return $html;
     }
+
+    /**
+     * Streamt eine Datei zum Browser
+     */
+    public static function streamFile(string $relativePath, bool $asAttachment = false): void
+    {
+        // Sicherheitscheck: Keine Pfadtraversierung erlauben
+        $relativePath = str_replace('\\', '/', $relativePath);
+        $relativePath = preg_replace('/\.{2,}/', '', $relativePath); // Entfernt .. aus dem Pfad
+
+        // Vollständigen Pfad erstellen
+        $filePath = UPLOAD_PATH . '/' . $relativePath;
+
+        // Prüfen, ob die Datei existiert und lesbar ist
+        if (!file_exists($filePath) || !is_file($filePath) || !is_readable($filePath)) {
+            http_response_code(404);
+            echo "Datei nicht gefunden oder nicht lesbar.";
+            exit;
+        }
+
+        // Dateigröße ermitteln
+        $fileSize = filesize($filePath);
+        if ($fileSize === false) {
+            http_response_code(500);
+            echo "Fehler beim Ermitteln der Dateigröße.";
+            exit;
+        }
+
+        // MIME-Typ ermitteln
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $filePath) ?: 'application/octet-stream';
+        finfo_close($finfo);
+
+        // Dateiname für Download extrahieren
+        $fileName = basename($filePath);
+
+        // HTTP-Header setzen
+        header('Content-Type: ' . $mimeType);
+        header('Content-Length: ' . $fileSize);
+        header('Cache-Control: public, max-age=86400'); // 1 Tag Cache
+
+        if ($asAttachment) {
+            // Als Anhang zum Download anbieten
+            header('Content-Disposition: attachment; filename="' . $fileName . '"');
+        } else {
+            // Im Browser anzeigen
+            header('Content-Disposition: inline; filename="' . $fileName . '"');
+        }
+
+        // Datei ausgeben
+        readfile($filePath);
+        exit;
+    }
 }

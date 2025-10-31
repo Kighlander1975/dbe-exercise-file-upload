@@ -269,18 +269,34 @@ $urlBase = rtrim(BASE_URL, '/');
                                             <?php echo date('Y-m-d H:i', (int)$f['mtime']); ?>
                                         </td>
                                         <td class="actions">
-                                            <?php if (!$isDir && $isInUploadDir): ?>
-                                                <?php
-                                                $viewUrl = $urlBase . '/file.php?name=' . rawurlencode($relativePath);
-                                                $downloadUrl = $viewUrl . '&download=1';
+                                            <?php
+                                            // Für Dateien (nicht Verzeichnisse)
+                                            if (!$isDir):
+                                                // Prüfen, ob die Datei anzeigbar ist
                                                 $inline = FileSystemExplorer::isInlineView($f['ext'] ?? '');
 
+                                                // Wenn die Datei im Upload-Verzeichnis liegt, können wir die relativen Pfade verwenden
+                                                if ($isInUploadDir) {
+                                                    $viewUrl = $urlBase . '/file.php?name=' . rawurlencode($relativePath);
+                                                    $downloadUrl = $viewUrl . '&download=1';
+                                                } else {
+                                                    // Für Dateien außerhalb des Upload-Verzeichnisses den vollständigen Pfad verwenden
+                                                    // Hier müssen wir den Pfad direkt übergeben
+                                                    $viewUrl = $urlBase . '/file.php?path=' . urlencode($path);
+                                                    $downloadUrl = $viewUrl . '&download=1';
+                                                }
+
+                                                // Ansehen-Button für anzeigbare Dateien
                                                 if ($inline):
-                                                ?>
+                                            ?>
                                                     <a href="<?php echo htmlspecialchars($viewUrl); ?>" target="_blank" rel="noopener" title="Öffnen">
                                                         <i class="fas fa-eye action-icon"></i>
                                                     </a>
-                                                <?php endif; ?>
+                                                <?php
+                                                endif;
+
+                                                // Download-Button für alle Dateien
+                                                ?>
                                                 <a href="<?php echo htmlspecialchars($downloadUrl); ?>" title="Herunterladen">
                                                     <i class="fas fa-download action-icon"></i>
                                                 </a>
