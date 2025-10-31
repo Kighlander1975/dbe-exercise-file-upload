@@ -12,6 +12,14 @@ RewriteRule ^assets/(.*)$ public/assets/$1 [L]
 RewriteCond %{REQUEST_URI} ^/DBE-exercises/dbe-php-file-upload/file.php
 RewriteRule ^file.php$ public/file.php [L]
 
+# Spezielle Regel für get_exif.php
+RewriteCond %{REQUEST_URI} ^/DBE-exercises/dbe-php-file-upload/get_exif.php
+RewriteRule ^get_exif.php$ public/get_exif.php [L]
+
+# Spezielle Regel für upload.php
+RewriteCond %{REQUEST_URI} ^/DBE-exercises/dbe-php-file-upload/upload.php
+RewriteRule ^upload.php$ public/upload.php [L]
+
 # 1) Wenn die angeforderte Ressource real existiert (Datei oder Ordner), direkt liefern
 RewriteCond %{DOCUMENT_ROOT}/DBE-exercises/dbe-php-file-upload/$1 -f [OR]
 RewriteCond %{DOCUMENT_ROOT}/DBE-exercises/dbe-php-file-upload/$1 -d

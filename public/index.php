@@ -9,10 +9,6 @@ require __DIR__ . '/../src/FileSystemExplorer.php';
 FlashMessage::init();
 $flashMessages = FlashMessage::getAll();
 
-// Prüfen, ob es ein direkter Aufruf ist oder ob wir über ".." navigieren
-// $isDirectAccess = !isset($_GET['path']) || trim($_GET['path']) === '';
-// $isNavigatingUp = isset($_GET['navigate_up']) && $_GET['navigate_up'] === '1';
-
 // Aktuellen Pfad bestimmen - vereinfachte Logik
 if (isset($_GET['path']) && trim($_GET['path']) !== '') {
     // Wenn ein Pfad angegeben ist, diesen verwenden
@@ -281,7 +277,6 @@ $urlBase = rtrim(BASE_URL, '/');
                                                     $downloadUrl = $viewUrl . '&download=1';
                                                 } else {
                                                     // Für Dateien außerhalb des Upload-Verzeichnisses den vollständigen Pfad verwenden
-                                                    // Hier müssen wir den Pfad direkt übergeben
                                                     $viewUrl = $urlBase . '/file.php?path=' . urlencode($path);
                                                     $downloadUrl = $viewUrl . '&download=1';
                                                 }
@@ -303,7 +298,14 @@ $urlBase = rtrim(BASE_URL, '/');
                                             <?php endif; ?>
 
                                             <?php if (!$isSpecial): ?>
-                                                <a href="#" title="Details" onclick="alert('<?php echo htmlspecialchars($isDir ? 'Verzeichnis: ' : 'Datei: '); ?><?php echo htmlspecialchars($name); ?>\nPfad: <?php echo htmlspecialchars($path); ?>\n<?php if (!$isDir): ?>Größe: <?php echo FileSystemExplorer::humanSize((int)$f['size']); ?>\nTyp: <?php echo strtoupper($f['ext'] ?: 'BIN'); ?>\n<?php endif; ?>Geändert: <?php echo date('Y-m-d H:i', (int)$f['mtime']); ?>')">
+                                                <!-- Info-Button mit Modal-Aufruf statt Alert -->
+                                                <a href="#" title="Details" class="info-button"
+                                                    data-path="<?php echo htmlspecialchars($path); ?>"
+                                                    data-name="<?php echo htmlspecialchars($name); ?>"
+                                                    data-is-dir="<?php echo $isDir ? '1' : '0'; ?>"
+                                                    data-size="<?php echo $isDir ? '0' : (int)$f['size']; ?>"
+                                                    data-type="<?php echo $isDir ? 'DIR' : strtoupper($f['ext'] ?: 'BIN'); ?>"
+                                                    data-mtime="<?php echo date('Y-m-d H:i', (int)$f['mtime']); ?>">
                                                     <i class="fas fa-info-circle action-icon"></i>
                                                 </a>
                                             <?php else: ?>
@@ -321,25 +323,69 @@ $urlBase = rtrim(BASE_URL, '/');
         </section>
     </div>
 
+    <!-- Modal für Dateidetails -->
+    <div id="file-details-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Dateidetails</h2>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="file-basic-info">
+                    <table class="details-table">
+                        <tr>
+                            <th>Name:</th>
+                            <td id="detail-name"></td>
+                        </tr>
+                        <tr>
+                            <th>Pfad:</th>
+                            <td id="detail-path"></td>
+                        </tr>
+                        <tr id="detail-size-row">
+                            <th>Größe:</th>
+                            <td id="detail-size"></td>
+                        </tr>
+                        <tr>
+                            <th>Typ:</th>
+                            <td id="detail-type"></td>
+                        </tr>
+                        <tr>
+                            <th>Geändert:</th>
+                            <td id="detail-mtime"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Bereich für Bild-Vorschau und EXIF-Daten -->
+                <div id="image-preview-container" style="display: none;">
+                    <h3>Vorschau</h3>
+                    <div class="image-preview">
+                        <img id="image-preview" src="" alt="Vorschau">
+                    </div>
+                </div>
+
+                <div id="exif-data-container" style="display: none;">
+                    <h3>EXIF-Daten</h3>
+                    <div id="exif-loading">Lade EXIF-Daten...</div>
+                    <div id="exif-content" style="display: none;">
+                        <table class="details-table" id="exif-table">
+                            <!-- EXIF-Daten werden hier per JavaScript eingefügt -->
+                        </table>
+                    </div>
+                    <div id="exif-error" style="display: none;">
+                        Keine EXIF-Informationen verfügbar.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="modal-close-btn" class="btn">Schließen</button>
+            </div>
+        </div>
+    </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const driveSelect = document.getElementById('drive-select');
-
-            // Event-Listener für Änderungen am Select-Feld
-            driveSelect.addEventListener('change', function() {
-                const selectedValue = this.value;
-
-                // Wenn nicht die Dummy-Option ausgewählt wurde
-                if (selectedValue !== 'dummy') {
-                    // Zum Root des ausgewählten Laufwerks navigieren
-                    window.location.href = '<?php echo $urlBase; ?>/?path=' + encodeURIComponent(selectedValue);
-                }
-            });
-
-            // Nach dem Laden der Seite immer auf die Dummy-Option zurücksetzen
-            driveSelect.value = 'dummy';
-        });
+        const baseUrl = '<?php echo htmlspecialchars($urlBase); ?>';
     </script>
+    <script src="<?php echo htmlspecialchars($urlBase); ?>/assets/scripts.js"></script>
 </body>
 
 </html>
