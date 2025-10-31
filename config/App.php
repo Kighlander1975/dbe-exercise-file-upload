@@ -14,5 +14,8 @@ define('UPLOAD_MAX_BYTES', 20 * 1024 * 1024); // 20 MB
 // Whitelist der erlaubten Endungen (regex, case-insensitive)
 define('UPLOAD_ALLOWED_EXT', ['jpg','jpeg','png','gif','webp','pdf','txt','md','mp3','mp4','doc','docx','xls','xlsx','ppt','pptx']);
 
+// Whitelist für versteckte Dateien, die angezeigt werden sollen
+define('SHOW_HIDDEN_FILES', ['.htaccess', '.env', '.htpasswd']);
+
 // Optional: ob beim Download der "originale" Dateiname erzwungen wird
 define('DOWNLOAD_FORCE_ATTACHMENT', false); // true = Content-Disposition: attachment

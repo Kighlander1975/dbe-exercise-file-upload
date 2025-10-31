@@ -1,0 +1,493 @@
+/* File Explorer Styles */
+:root {
+    color-scheme: light dark;
+    --border-color: #ddd;
+    --highlight-color: #f0f0f0;
+    --active-color: #e0e0ff;
+    --hover-color: #f5f5f5;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Verhindert den äußeren Scrollbalken */
+}
+
+body {
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Verhindert Scrollbalken im Container */
+    height: 100vh; /* Volle Viewport-Höhe */
+}
+
+h1 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+/* Angepasster Upload-Bereich */
+form.upload {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    max-width: 100%;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    align-items: center;
+    flex-shrink: 0; /* Verhindert Schrumpfen des Upload-Bereichs */
+}
+
+.upload-row {
+    display: flex;
+    flex: 1;
+    gap: 1rem; /* Erhöhter Abstand zwischen den Elementen */
+    align-items: center;
+    width: 100%;
+}
+
+.upload-info-row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.file-input-container {
+    flex: 2;
+    height: 38px; /* Einheitliche Höhe */
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+/* Styling für den Dateiauswahl-Button */
+.file-input-container input[type="file"] {
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: #fff;
+    padding: 0.4rem;
+}
+
+.folder-input-container {
+    flex: 2;
+    height: 38px; /* Einheitliche Höhe */
+}
+
+.button-container {
+    flex: 1;
+    min-width: 100px;
+    height: 38px; /* Einheitliche Höhe */
+}
+
+input[type="text"],
+input[type="file"] {
+    width: 100%;
+    padding: 0.4rem;
+    height: 38px; /* Einheitliche Höhe */
+    box-sizing: border-box;
+}
+
+input[type="text"] {
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+button {
+    padding: .6rem 1rem;
+    cursor: pointer;
+    width: 100%;
+    height: 38px; /* Einheitliche Höhe */
+    box-sizing: border-box;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: #f8f9fa;
+}
+
+button:hover {
+    background-color: #e9ecef;
+}
+
+.explorer {
+    display: flex;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+    flex: 1; /* Füllt den verfügbaren Platz */
+    min-height: 0; /* Wichtig für Flexbox-Scrolling */
+}
+
+.explorer-sidebar {
+    width: 25%;
+    border-right: 1px solid var(--border-color);
+    overflow-y: auto;
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+}
+
+.explorer-content {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Verhindert Scrollbalken im Content-Bereich */
+}
+
+.content-header {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0; /* Verhindert Schrumpfen des Headers */
+}
+
+.breadcrumb {
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    white-space: nowrap;
+    margin-bottom: 0.5rem;
+    flex-shrink: 0; /* Verhindert Schrumpfen der Breadcrumb */
+}
+
+.files {
+    flex: 1; /* Füllt den verfügbaren Platz */
+    overflow-y: auto; /* Scrollbalken nur für die Dateiliste */
+    padding: 0 0.5rem;
+}
+
+.directory-tree {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.directory-tree ul {
+    list-style-type: none;
+    padding-left: 1.2rem;
+    margin: 0;
+}
+
+.directory-tree li {
+    padding: 2px 0;
+}
+
+.tree-item {
+    padding: 4px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.tree-item:hover {
+    background-color: var(--hover-color);
+}
+
+.tree-item-active {
+    background-color: var(--active-color);
+    font-weight: bold;
+}
+
+.tree-item a {
+    text-decoration: none;
+    color: inherit;
+    margin-left: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+    display: inline-block;
+}
+
+.files table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    table-layout: fixed; /* Für feste Spaltenbreiten */
+}
+
+.files th,
+.files td {
+    padding: .4rem .5rem;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* Spaltenbreiten definieren */
+.files th:nth-child(1),
+.files td:nth-child(1) {
+    width: 40%; /* Name-Spalte */
+}
+
+.files th:nth-child(2),
+.files td:nth-child(2),
+.files th:nth-child(3),
+.files td:nth-child(3) {
+    width: 10%; /* Größe und Typ */
+}
+
+.files th:nth-child(4),
+.files td:nth-child(4) {
+    width: 20%; /* Datum */
+}
+
+.files th:nth-child(5),
+.files td:nth-child(5) {
+    width: 20%; /* Aktionen */
+}
+
+/* Für lange Dateinamen */
+.file-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    max-width: calc(100% - 25px); /* Platz für das Icon */
+    vertical-align: middle;
+}
+
+.files tr:hover {
+    background-color: var(--hover-color);
+}
+
+.badge {
+    font-size: .75rem;
+    padding: .2rem .4rem;
+    border-radius: .4rem;
+    background: #eee;
+}
+
+.actions {
+    /* display: flex; */ /* entfernt von mir */
+    gap: 8px;
+}
+
+.actions a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.empty {
+    color: #666;
+    font-style: italic;
+    padding: 1rem;
+}
+
+.flash {
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    flex-shrink: 0; /* Verhindert Schrumpfen der Flash-Messages */
+}
+
+.flash-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.flash-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb-separator {
+    margin: 0 5px;
+    color: #6c757d;
+}
+
+.file-icon {
+    margin-right: 5px;
+}
+
+.folder-icon {
+    color: #ffc107;
+}
+
+.file-icon-generic {
+    color: #6c757d;
+}
+
+.file-icon-image {
+    color: #28a745;
+}
+
+.file-icon-document {
+    color: #007bff;
+}
+
+.file-icon-audio {
+    color: #dc3545;
+}
+
+.file-icon-video {
+    color: #6610f2;
+}
+
+.file-details {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.action-icon {
+    font-size: 1.1rem;
+}
+
+.content-header h3 {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.content-path {
+    font-weight: normal;
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-left: 0.5rem;
+}
+
+.drive-selector {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+}
+
+.drive-selector select {
+    width: 100%;
+    padding: 0.3rem;
+}
+
+.upload-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+/* Konsistente Formatierung für alle Tabellenzellen */
+    .files table td {
+        padding: 8px;
+        vertical-align: middle;
+    }
+    
+    /* Aktionsspalte mit fester Breite */
+    .files table td.actions {
+        width: 120px;
+        min-width: 120px;
+        /*text-align: center; */ /* entfernt von mir */
+        white-space: nowrap;
+    }
+    
+    /* Gleiche Größe für alle Icons */
+    .files table .action-icon {
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        text-align: center;
+    }
+    
+    /* Gleicher Abstand zwischen Icons */
+    .files table td.actions a {
+        margin: 0 4px;
+        display: inline-block;
+    }
+
+    /* Basis-Badge-Stil */
+.badge {
+    font-size: .75rem;
+    padding: .2rem .4rem;
+    border-radius: .4rem;
+    background: #eee;
+    color: #333;
+}
+
+/* Verzeichnis-Badge */
+.badge-dir {
+    background-color: #ffc107; /* Gelb */
+    color: #212529;
+}
+
+/* Dokument-Badges */
+.badge-doc {
+    background-color: #007bff; /* Blau */
+    color: #fff;
+}
+
+/* Bild-Badges */
+.badge-image {
+    background-color: #28a745; /* Grün */
+    color: #fff;
+}
+
+/* Audio-Badges */
+.badge-audio {
+    background-color: #dc3545; /* Rot */
+    color: #fff;
+}
+
+/* Video-Badges */
+.badge-video {
+    background-color: #6610f2; /* Lila */
+    color: #fff;
+}
+
+/* Code-Badges */
+.badge-code {
+    background-color: #17a2b8; /* Türkis */
+    color: #fff;
+}
+
+/* Archiv-Badges */
+.badge-archive {
+    background-color: #fd7e14; /* Orange */
+    color: #fff;
+}
+
+/* Ausführbare Dateien */
+.badge-executable {
+    background-color: #6c757d; /* Grau */
+    color: #fff;
+}
+
+/* Unbekannte Dateitypen */
+.badge-other {
+    background-color: #eee; /* Hellgrau */
+    color: #333;
+}

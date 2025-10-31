@@ -4,6 +4,10 @@ RewriteEngine On
 # Basis relativ zu http://localhost/DBE-exercises/dbe-php-file-upload/
 RewriteBase /DBE-exercises/dbe-php-file-upload/
 
+# Spezielle Regel für assets-Verzeichnis
+RewriteCond %{REQUEST_URI} ^/DBE-exercises/dbe-php-file-upload/assets/(.*)$
+RewriteRule ^assets/(.*)$ public/assets/$1 [L]
+
 # 1) Wenn die angeforderte Ressource real existiert (Datei oder Ordner), direkt liefern
 RewriteCond %{DOCUMENT_ROOT}/DBE-exercises/dbe-php-file-upload/$1 -f [OR]
 RewriteCond %{DOCUMENT_ROOT}/DBE-exercises/dbe-php-file-upload/$1 -d

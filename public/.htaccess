@@ -1,0 +1,10 @@
+# Aktiviere die Rewrite-Engine
+RewriteEngine On
+
+# Wenn die Anfrage direkt auf ein existierendes Verzeichnis oder eine Datei zeigt, nichts tun
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Alle anderen Anfragen an index.php weiterleiten
+RewriteRule ^ index.php [L]
